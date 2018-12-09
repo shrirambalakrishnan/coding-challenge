@@ -32,18 +32,20 @@ class CombinationGenerator
   end
 
   def generate
-    digits_str_array = number.to_s.split('')
+    digits_str_array = number.split('')
     all_combinations = []
     digits_str_array_size = digits_str_array.size
 
     get_combinations(digits_str_array, all_combinations, 0, "")
+
+    all_combinations
   end
 
   def get_combinations(digits_str_array, all_combinations, index_to_process, output_word)
     if index_to_process == digits_str_array.size
       all_combinations << output_word.dup # dup - ensures reference of the output_word object is NOT stored in the all_combinations.
     else
-      digit_to_process = digits_str_array[0]
+      digit_to_process = digits_str_array[index_to_process]
       possibilities = NUMBER_TO_DIGIT_MAPPING[digit_to_process]
 
       possibilities.each do |possible_char|        
@@ -55,10 +57,47 @@ class CombinationGenerator
   end
 end
 
-# p Benchmark.measure { WordCombinationsGenerator.new(6686787825).generate }
+class WordCombinationsGenerator
+  attr_reader :number
 
-# p Benchmark.measure { CombinationGenerator.new.generate(6686787825) }
+  def initialize(number)
+    @number = number.to_s
+  end
 
-# p Benchmark.measure { DictionaryProcessor.new('dictionary.txt').generate_word_digit_mapping }
+  def generate
+    all_combinations = CombinationGenerator.new(number).generate    
+    all_words_in_dictionary = DictionaryProcessor.new('dictionary.txt').read_words
+    number_size = number.size
+    available_combinations = []
+    
+    all_combinations.each_with_index do |word, index|
+      p "==== index = #{index + 1} ======="
+      
+      # Each word size has to be atleast 3.
+      split_position = 3
 
-words_in_dictionary = DictionaryProcessor.new('dictionary.txt').read_words
+      for i in 3...number_size do
+
+        word_first_part = word[0...i]
+        word_last_part  = word[i...number_size]
+
+        if i < number_size - 1
+          
+          if all_words_in_dictionary.bsearch { |x| word_first_part <=> x } && all_words_in_dictionary.bsearch{ |x| word_last_part <=> x }
+            available_combinations << [word_first_part, word_last_part]
+          end
+        else           
+          
+          if all_words_in_dictionary.bsearch { |x| word_first_part <=> x }
+            available_combinations << word_first_part
+          end
+        end
+      end
+    end
+
+    available_combinations
+  end
+end
+
+# p WordCombinationsGenerator.new(6686787825).generate
+p WordCombinationsGenerator.new(2282668687).generate
