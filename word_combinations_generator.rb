@@ -74,13 +74,12 @@ class WordCombinationsGenerator
       p "==== index = #{index + 1} ======="
       
       # Each word size has to be atleast 3.
-      split_position = 3
-
-      for i in 3...number_size do
-
-        word_first_part = word[0...i]
-        word_last_part  = word[i...number_size]
-
+      split_position = 2
+      
+      for i in split_position...number_size do
+        word_first_part = word[0..i]
+        word_last_part  = word[i+1...number_size]
+        
         if i < number_size - 1
           
           if all_words_in_dictionary.bsearch { |x| word_first_part <=> x } && all_words_in_dictionary.bsearch{ |x| word_last_part <=> x }
