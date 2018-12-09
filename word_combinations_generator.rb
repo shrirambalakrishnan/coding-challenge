@@ -70,9 +70,7 @@ class WordCombinationsGenerator
     number_size = number.size
     available_combinations = []
     
-    all_combinations.each_with_index do |word, index|
-      p "==== index = #{index + 1} ======="
-      
+    all_combinations.each_with_index do |word, index|      
       # Each word size has to be atleast 3.
       split_position = 2
       
@@ -98,5 +96,12 @@ class WordCombinationsGenerator
   end
 end
 
-# p WordCombinationsGenerator.new(6686787825).generate
-p WordCombinationsGenerator.new(2282668687).generate
+# Benchmark result for first test case:
+# p Benchmark.measure { WordCombinationsGenerator.new(6686787825).generate }
+#<Benchmark::Tms:0x007fadf6223ed0 @label="", @real=1.545204000081867, @cstime=0.0, @cutime=0.0, @stime=0.020000000000000004, @utime=1.53, @total=1.55>
+
+# Benchmark result for first test case:
+# p Benchmark.measure { WordCombinationsGenerator.new(2282668687).generate }
+#<Benchmark::Tms:0x007fcf145cab30 @label="", @real=1.1367170000448823, @cstime=0.0, @cutime=0.0, @stime=0.010000000000000009, @utime=1.1199999999999999, @total=1.13>
+
+p WordCombinationsGenerator.new(6686787825).generate
