@@ -95,9 +95,50 @@ class CombinationGenerator
     '9' => ['W', 'X', 'Y', 'Z']
   }
 
-  def generate
+  def generate(number)
+    digits_str_array = number.to_s.split('')
+    all_combinations = []
+    digits_str_array_size = digits_str_array.size
+
+    get_combinations(digits_str_array, all_combinations, 0, digits_str_array_size, "")
     
+    all_combinations
+  end
+
+  def get_combinations(digits_str_array, all_combinations, index_processed, digits_str_array_size, output_word)
+    p '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+    p "digits_str_array = #{digits_str_array}"
+    p "index_processed = #{index_processed}"
+    p "output_word = #{output_word}"
+    p '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+    
+    if index_processed == digits_str_array_size
+      all_combinations << output_word
+
+      p "************** output_word = #{output_word} || all_combinations = #{all_combinations} **************"
+    else
+
+      digits_str_array.each_with_index do |digit_string, index|
+        next if index < index_processed
+        
+        p "======================== #{digit_string} ========================"
+
+        digit_string_possibilities = NUMBER_TO_DIGIT_MAPPING[digit_string]
+
+        digit_string_possibilities.each do |possible_char|
+          p "----------- #{possible_char} -----------"
+          output_word = output_word.dup
+          output_word[index_processed] = possible_char
+
+          get_combinations( digits_str_array, all_combinations,  index + 1, digits_str_array_size, output_word)
+        end
+        
+      end
+      
+    end
   end
 end
 
-p Benchmark.measure { WordCombinationsGenerator.new(6686787825).generate }
+# p Benchmark.measure { WordCombinationsGenerator.new(6686787825).generate }
+
+CombinationGenerator.new.generate(222)
