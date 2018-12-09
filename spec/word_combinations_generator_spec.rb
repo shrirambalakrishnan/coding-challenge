@@ -24,3 +24,30 @@ describe WordCombinationsGenerator do
   end
 
 end
+
+describe CombinationGenerator do
+  describe 'generate' do
+
+    context "when stringified number is passed" do
+
+      it "generates array of all combinations" do
+        all_combinations_for_222 = [
+          "AAA", "AAB", "AAC", "ABA", "ABB", "ABC", "ACA", "ACB", "ACC", 
+          "BAA", "BAB", "BAC", "BBA", "BBB", "BBC", "BCA", "BCB", "BCC", 
+          "CAA", "CAB", "CAC", "CBA", "CBB", "CBC", "CCA", "CCB", "CCC"
+        ]
+
+        expect(CombinationGenerator.new("222").generate).to eq(all_combinations_for_222)
+      end
+      
+    end
+  end
+
+  describe DictionaryProcessor do
+    describe 'read_words' do
+      it 'requires presence of dictionary.txt file' do
+        expect(File.exists?('dictionary.txt')).to be_truthy
+      end
+    end
+  end
+end
