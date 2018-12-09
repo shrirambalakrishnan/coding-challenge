@@ -100,42 +100,24 @@ class CombinationGenerator
     all_combinations = []
     digits_str_array_size = digits_str_array.size
 
-    get_combinations(digits_str_array, all_combinations, 0, digits_str_array_size, "")
+    get_combinations(digits_str_array, all_combinations, 0, "")
     
-    all_combinations
+    p all_combinations
   end
 
-  def get_combinations(digits_str_array, all_combinations, index_processed, digits_str_array_size, output_word)
-    p '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
-    p "digits_str_array = #{digits_str_array}"
-    p "index_processed = #{index_processed}"
-    p "output_word = #{output_word}"
-    p '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
-    
-    if index_processed == digits_str_array_size
-      all_combinations << output_word
-
-      p "************** output_word = #{output_word} || all_combinations = #{all_combinations} **************"
+  def get_combinations(digits_str_array, all_combinations, index_to_process, output_word)
+    if index_to_process == digits_str_array.size
+      all_combinations << output_word.dup # dup - ensures reference of the output_word object is NOT stored in the all_combinations.
     else
+      digit_to_process = digits_str_array[0]
+      possibilities = NUMBER_TO_DIGIT_MAPPING[digit_to_process]
 
-      digits_str_array.each_with_index do |digit_string, index|
-        next if index < index_processed
-        
-        p "======================== #{digit_string} ========================"
-
-        digit_string_possibilities = NUMBER_TO_DIGIT_MAPPING[digit_string]
-
-        digit_string_possibilities.each do |possible_char|
-          p "----------- #{possible_char} -----------"
-          output_word = output_word.dup
-          output_word[index_processed] = possible_char
-
-          get_combinations( digits_str_array, all_combinations,  index + 1, digits_str_array_size, output_word)
-        end
-        
+      possibilities.each do |possible_char|        
+        output_word[index_to_process] = possible_char
+        get_combinations( digits_str_array, all_combinations,  index_to_process + 1, output_word)
       end
-      
     end
+
   end
 end
 
